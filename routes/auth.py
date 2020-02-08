@@ -34,14 +34,11 @@ def login():
 def register():
     username = request.json.get('username')
     fullname = request.json.get('fullname')
-    phone = request.json.get('phone')
     password = request.json.get('password')
     if not username:
         return jsonify({"msg": "username is required"}), 422
     if not fullname:
-        return jsonify({"msg": "fullname is required"}), 422
-    if not phone:
-        return jsonify({"msg": "phone is required"}), 422              
+        return jsonify({"msg": "fullname is required"}), 422             
     if not password:
         return jsonify({"msg": "password is required"}), 422
     user = User.query.filter_by(username=username).first()
@@ -50,7 +47,6 @@ def register():
     user = User()
     user.username = username
     user.fullname = fullname
-    user.phone = phone
     user.password = bcrypt.generate_password_hash(password)
     db.session.add(user)
     db.session.commit()

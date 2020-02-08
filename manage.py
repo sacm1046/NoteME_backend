@@ -7,11 +7,15 @@ from flask_mail import Mail, Message
 from flask_jwt_extended import (
     JWTManager
 )
-from models import db, User, Profesor, Sede, Curso
+from models import db, User, Curso, Agenda, Note, Text, Image, Lista, Listline 
 from routes.user import route_users
-from routes.profesor import route_profesores
-from routes.sede import route_sedes
 from routes.curso import route_cursos
+from routes.agenda import route_agendas
+from routes.note import route_notes
+from routes.text import route_texts
+from routes.image import route_images
+from routes.lista import route_listas
+from routes.listline import route_listlines
 from routes.auth import auth
 
 from libs.functions import allowed_file
@@ -60,9 +64,13 @@ def home():
 
 app.register_blueprint(auth)
 app.register_blueprint(route_users, url_prefix='/api')
-app.register_blueprint(route_profesores, url_prefix='/api')
-app.register_blueprint(route_sedes, url_prefix='/api')
 app.register_blueprint(route_cursos, url_prefix='/api')
+app.register_blueprint(route_agendas, url_prefix='/api')
+app.register_blueprint(route_notes, url_prefix='/api')
+app.register_blueprint(route_texts, url_prefix='/api')
+app.register_blueprint(route_images, url_prefix='/api')
+app.register_blueprint(route_listas, url_prefix='/api')
+app.register_blueprint(route_listlines, url_prefix='/api')
 
 @app.route('/sendmail', methods=['POST'])
 def sendmail():
