@@ -41,12 +41,12 @@ def users(id=None):
         return jsonify(user.serialize()), 201
     
     if request.method == 'PUT':
-        password = request.json.get('password')
+        #password = request.json.get('password')
         user = User.query.get(id)
         user.fullname = request.json.get('fullname')
         user.isAdmin = request.json.get('isAdmin')
         user.active = request.json.get('active')
-        user.password = bcrypt.generate_password_hash(password)
+        #user.password = bcrypt.generate_password_hash(password)
 
         db.session.commit()
 
