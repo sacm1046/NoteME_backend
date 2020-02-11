@@ -47,7 +47,6 @@ def notes(id=None):
         
         note = Note.query.get(id)
         note.title = request.json.get('title')
-        note.date = request.json.get('date')
         note.agenda_id = request.json.get('agenda_id')
 
         db.session.commit()

@@ -77,7 +77,10 @@ class Note(db.Model):
 class Text(db.Model):
     __tablename__ = 'texts'
     id=db.Column(db.Integer, primary_key=True)
-    content=db.Column(db.Text(), nullable=False)
+    content=db.Column(db.Text(), nullable=True)
+    url=db.Column(db.String(255), nullable=True)
+    date=db.Column(db.String(255), nullable=False)
+    time=db.Column(db.String(255), nullable=False)
 
     note_id = db.Column(db.Integer, db.ForeignKey('notes.id'), nullable=False)
     note = db.relationship(Note)
@@ -89,59 +92,8 @@ class Text(db.Model):
         return{
             'id': self.id,
             'content': self.content,
-            'note': self.note.serialize()
-        }
-
-class Image(db.Model):
-    __tablename__ = 'images'
-    id=db.Column(db.Integer, primary_key=True)
-    url=db.Column(db.String(255), nullable=False)
-
-    note_id = db.Column(db.Integer, db.ForeignKey('notes.id'), nullable=False)
-    note = db.relationship(Note)
-
-    def __repr__(self):
-        return 'Image %r' % self.url
-
-    def serialize(self):
-        return{
-            'id': self.id,
             'url': self.url,
-            'note': self.note.serialize() 
-        }
-
-class Lista(db.Model):
-    __tablename__ = 'listas'
-    id=db.Column(db.Integer, primary_key=True)
-    name=db.Column(db.String(255), nullable=False)
-
-    note_id = db.Column(db.Integer, db.ForeignKey('notes.id'), nullable=False)
-    note = db.relationship(Note)
-
-    def __repr__(self):
-        return 'Lista %r' % self.name
-
-    def serialize(self):
-        return{
-            'id': self.id,
-            'name': self.name,
-            'note': self.note.serialize() 
-        }
-
-class Listline(db.Model):
-    __tablename__ = 'listlines'
-    id=db.Column(db.Integer, primary_key=True)
-    line=db.Column(db.String(255), nullable=False)
-
-    lista_id = db.Column(db.Integer, db.ForeignKey('listas.id'), nullable=False)
-    lista = db.relationship(Lista)
-
-    def __repr__(self):
-        return 'List %r' % self.line
-
-    def serialize(self):
-        return{
-            'id': self.id,
-            'line': self.line,
-            'lista': self.lista.serialize() 
+            'date': self.date,
+            'time': self.time,
+            'note': self.note.serialize()
         }

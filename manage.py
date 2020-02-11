@@ -1,31 +1,28 @@
 import os
-from flask import Flask, render_template, jsonify, request, Blueprint, send_from_directory 
+from flask import Flask, render_template, jsonify, request, Blueprint, send_from_directory #move to new route file
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from flask_cors import CORS
-from flask_mail import Mail, Message
+from flask_mail import Mail, Message #move to new route mail
 from flask_jwt_extended import (
     JWTManager
 )
-from models import db, User, Curso, Agenda, Note, Text, Image, Lista, Listline 
+from models import db, User, Curso, Agenda, Note, Text
 from routes.user import route_users
 from routes.curso import route_cursos
 from routes.agenda import route_agendas
 from routes.note import route_notes
 from routes.text import route_texts
-from routes.image import route_images
-from routes.lista import route_listas
-from routes.listline import route_listlines
 from routes.auth import auth
 
-from libs.functions import allowed_file
-from werkzeug.utils import secure_filename
+from libs.functions import allowed_file #move to new route file
+from werkzeug.utils import secure_filename #move to new route file
 
 from datetime import timedelta
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static/img')
-ALLOWED_EXTENSIONS = {'jpg','png','jpeg','pdf'}
+ALLOWED_EXTENSIONS = {'jpg','png','jpeg'} #'pdf' and others Move to new route mail
 
 app=Flask(__name__)
 app.url_map.strict_slashes = False #Slashes
@@ -45,7 +42,7 @@ app.config['MAIL_PASSWORD'] = 'tdrzlquykyzmnsch'
 
 app.config['JWT_SECRET_KEY'] = 'super-secrets'
 #app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False #inhabilita la expiración del token
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=3) #inhabilita en tres dias el token
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=10) #inhabilita en tres dias el token
 
 jwt = JWTManager(app)
 db.init_app(app)
@@ -68,9 +65,6 @@ app.register_blueprint(route_cursos, url_prefix='/api')
 app.register_blueprint(route_agendas, url_prefix='/api')
 app.register_blueprint(route_notes, url_prefix='/api')
 app.register_blueprint(route_texts, url_prefix='/api')
-app.register_blueprint(route_images, url_prefix='/api')
-app.register_blueprint(route_listas, url_prefix='/api')
-app.register_blueprint(route_listlines, url_prefix='/api')
 
 @app.route('/sendmail', methods=['POST'])
 def sendmail():
