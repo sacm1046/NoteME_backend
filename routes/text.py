@@ -7,19 +7,31 @@ from flask_jwt_extended import (
 route_texts = Blueprint('route_texts', __name__)
 
 @route_texts.route('/texts', methods=['GET','POST'])
+@route_texts.route('/texts/note/<int:note_id>', methods=['GET','POST'])
 @route_texts.route('/texts/<int:id>', methods=['GET','PUT','DELETE'])
+@route_texts.route('/texts/note/<int:note_id>/text/<int:id>', methods=['GET','POST'])
 @jwt_required
-def texts(id=None):
+def texts(note_id=None, id=None):
     if request.method == 'GET':
-        if id is not None:
-            text = Text.query.get(id)
+        if id is not None and note_id is not None:
+            text = Text.query.filter_by(note_id=note_id, id=id).first()
             if text:
                 return jsonify(text.serialize()), 200
             else:
                 return jsonify({"text":"Not found"}), 404
+        elif id is not None:
+            text = Text.query.get(id)
+            if text:
+                return jsonify(text.serialize()), 200
+            else:     
+                return jsonify({"text":"Not found"}), 404
+        elif note_id is not None:
+            texts = Text.query.filter_by(note_id = note_id).all()
+            texts = list(map(lambda text: text.serialize(),texts))
+            return jsonify(texts), 200
         else:
             texts = Text.query.all()
-            texts = list(map(lambda text: text.serialize(),texts))
+            texts = list(map(lambda text: text.serialize(), texts))
             return jsonify(texts), 200
     
     if request.method == 'POST':       

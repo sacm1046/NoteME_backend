@@ -7,19 +7,31 @@ from flask_jwt_extended import (
 route_notes = Blueprint('route_notes', __name__)
 
 @route_notes.route('/notes', methods=['GET','POST'])
+@route_notes.route('/notes/agenda/<int:agenda_id>', methods=['GET','POST'])
 @route_notes.route('/notes/<int:id>', methods=['GET','PUT','DELETE'])
+@route_notes.route('/notes/agenda/<int:agenda_id>/note/<int:id>', methods=['GET','POST'])
 @jwt_required
-def notes(id=None):
+def notes(agenda_id=None, id=None):
     if request.method == 'GET':
-        if id is not None:
-            note = Note.query.get(id)
+        if id is not None and agenda_id is not None:
+            note = Note.query.filter_by(agenda_id=agenda_id, id=id).first()
             if note:
                 return jsonify(note.serialize()), 200
             else:
                 return jsonify({"note":"Not found"}), 404
+        elif id is not None:
+            note = Note.query.get(id)
+            if note:
+                return jsonify(note.serialize()), 200
+            else:     
+                return jsonify({"note":"Not found"}), 404
+        elif agenda_id is not None:
+            notes = Note.query.filter_by(agenda_id = agenda_id).all()
+            notes = list(map(lambda note: note.serialize(),notes))
+            return jsonify(notes), 200
         else:
             notes = Note.query.all()
-            notes = list(map(lambda note: note.serialize(),notes))
+            notes = list(map(lambda note: note.serialize(), notes))
             return jsonify(notes), 200
     
     if request.method == 'POST':

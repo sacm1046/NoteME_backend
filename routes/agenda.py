@@ -7,16 +7,28 @@ from flask_jwt_extended import (
 route_agendas = Blueprint('route_agendas', __name__)
 
 @route_agendas.route('/agendas', methods=['GET','POST'])
+@route_agendas.route('/agendas/user/<int:user_id>', methods=['GET','POST'])
 @route_agendas.route('/agendas/<int:id>', methods=['GET','PUT','DELETE'])
+@route_agendas.route('/agendas/user/<int:user_id>/agenda/<int:id>', methods=['GET, POST'])
 @jwt_required
-def agendas(id=None):
+def agendas(user_id=None, id=None):
     if request.method == 'GET':
-        if id is not None:
+        if id is not None and user_id is not None:
+            agenda = Agenda.query.filter_by(user_id=user_id, id=id).first()
+            if agenda:
+                return jsonify(agenda.serialize()), 200
+            else:
+                return jsonify({"agenda":"Not found"}), 404
+        elif id is not None:
             agenda = Agenda.query.get(id)
             if agenda:
                 return jsonify(agenda.serialize()), 200
             else:
                 return jsonify({"agenda":"Not found"}), 404
+        elif user_id is not None:
+            agendas = Agenda.query.filter_by(user_id = user_id).all()
+            agendas = list(map(lambda agenda: agenda.serialize(),agendas))
+            return jsonify(agendas), 200
         else:
             agendas = Agenda.query.all()
             agendas = list(map(lambda agenda: agenda.serialize(),agendas))

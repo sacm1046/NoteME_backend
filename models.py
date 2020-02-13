@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import backref
 db = SQLAlchemy()
 
 class User(db.Model):
@@ -42,7 +43,7 @@ class Agenda(db.Model):
     title=db.Column(db.String(255), nullable=False, default="Agenda")
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship(User)
+    user = db.relationship(User, backref=backref("children", cascade="all,delete"))
 
     def __repr__(self):
         return 'Agenda %r' % self.title
@@ -61,7 +62,7 @@ class Note(db.Model):
     date=db.Column(db.String(255), nullable=False)
 
     agenda_id = db.Column(db.Integer, db.ForeignKey('agendas.id'), nullable=False)
-    agenda = db.relationship(Agenda)
+    agenda = db.relationship(Agenda, backref=backref("children", cascade="all,delete"))
 
     def __repr__(self):
         return 'Note %r' % self.title
@@ -71,7 +72,7 @@ class Note(db.Model):
             'id': self.id,
             'title': self.title,
             'date': self.date,
-            'agenda': self.agenda.serialize() 
+            'agenda': self.agenda.serialize()
         }
 
 class Text(db.Model):
@@ -83,7 +84,7 @@ class Text(db.Model):
     time=db.Column(db.String(255), nullable=False)
 
     note_id = db.Column(db.Integer, db.ForeignKey('notes.id'), nullable=False)
-    note = db.relationship(Note)
+    note = db.relationship(Note , backref=backref("children", cascade="all,delete"))
 
     def __repr__(self):
         return 'Text %r' % self.content
