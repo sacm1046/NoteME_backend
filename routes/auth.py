@@ -13,12 +13,12 @@ def login():
     username = request.json.get('username')
     password = request.json.get('password')
     if not username:
-        return jsonify({"msg": "username is required"}), 422
+        return jsonify({"msg": "Email es obligatorio"}), 422
     if not password:
-        return jsonify({"msg": "password is required"}), 422
+        return jsonify({"msg": "Contraseña es obligatoria"}), 422
     user = User.query.filter_by(username=username).first()
     if not user:
-        return jsonify({"msg": "username not found"}), 404
+        return jsonify({"msg": "Email no encontrado"}), 404
     pw_hash = bcrypt.generate_password_hash(password)
     if bcrypt.check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.username)
@@ -28,7 +28,7 @@ def login():
         }
         return jsonify(data), 200
     else: 
-        return jsonify({"msg": "username/password is wrong"}), 401
+        return jsonify({"msg": "Email o contraseña incorrecto(s)"}), 401
         
 @auth.route('/register', methods=['POST'])
 def register():
@@ -36,14 +36,14 @@ def register():
     fullname = request.json.get('fullname')
     password = request.json.get('password')
     if not username:
-        return jsonify({"msg": "username is required"}), 422
+        return jsonify({"msg": "Email es obligatorio"}), 422
     if not fullname:
-        return jsonify({"msg": "fullname is required"}), 422             
+        return jsonify({"msg": "Nombre es obligatorio"}), 422             
     if not password:
-        return jsonify({"msg": "password is required"}), 422
+        return jsonify({"msg": "Contraseña es obligatoria"}), 422
     user = User.query.filter_by(username=username).first()
     if user:
-        return jsonify({"msg": "username is taken"}), 422
+        return jsonify({"msg": "Email ya registrado"}), 422
     user = User()
     user.username = username
     user.fullname = fullname
@@ -51,7 +51,7 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    sendMail("Welcome "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Welcome "+user.fullname)
+    sendMail("Bienvenid@ "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Bienvenid@ "+user.fullname)
 
     if bcrypt.check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.username)
@@ -61,4 +61,4 @@ def register():
         }
         return jsonify(data), 200
     else: 
-        return jsonify({"msg": "username/password is wrong"}), 401
+        return jsonify({"msg": "Email o contraseña incorrecto(s)"}), 401

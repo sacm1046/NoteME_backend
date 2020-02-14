@@ -36,7 +36,7 @@ def users(id=None):
         db.session.add(user)
         db.session.commit()
 
-        sendMail("Welcome "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Welcome "+user.fullname)
+        sendMail("Bienvenid@ "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Bienvenid@ "+user.fullname)
 
         return jsonify(user.serialize()), 201
     
@@ -48,7 +48,7 @@ def users(id=None):
 
         db.session.commit()
 
-        sendMail("Hello "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Successfully update "+user.fullname)
+        sendMail("Hola "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Modificación realizada con éxito, "+user.fullname)
 
         return jsonify(user.serialize()), 200
 
@@ -57,6 +57,6 @@ def users(id=None):
         db.session.delete(user)
         db.session.commit()
 
-        sendMail("Bye "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Correct user deleting")
+        sendMail("Hasta pronto "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Usuario eliminado con éxito")
 
         return jsonify({'user':'Deleted'}), 200

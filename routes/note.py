@@ -39,11 +39,11 @@ def notes(agenda_id=None, id=None):
         date=request.json.get('date')
         agenda_id=request.json.get('agenda_id')
         if not title:
-            return jsonify({"msg": "title is required"}), 422  
+            return jsonify({"msg": "Título es obligatorio"}), 422  
         if not date:
-            return jsonify({"msg": "date is required"}), 422  
+            return jsonify({"msg": "Fecha es obligatorio"}), 422  
         if not agenda_id:
-            return jsonify({"msg": "agenda_id is required"}), 422  
+            return jsonify({"msg": "agenda_id es obligatorio"}), 422  
            
         note = Note()
         note.title = title

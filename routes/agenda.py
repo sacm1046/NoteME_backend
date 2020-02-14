@@ -38,9 +38,9 @@ def agendas(user_id=None, id=None):
         title = request.json.get('title')
         user_id = request.json.get('user_id')
         if not title:
-            return jsonify({"msg": "title is required"}), 422 
+            return jsonify({"msg": "Título es obligatorio"}), 422 
         if not user_id:
-            return jsonify({"msg": "user_id is required"}), 422 
+            return jsonify({"msg": "user_id es obligatorio"}), 422 
 
         agenda = Agenda()
         agenda.title = title
