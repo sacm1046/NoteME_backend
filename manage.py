@@ -38,7 +38,7 @@ app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEBUG'] = True
 app.config['MAIL_USERNAME'] = 'cm.seb90@gmail.com'
-app.config['MAIL_PASSWORD'] = 'trkgssgansubcobq' 
+app.config['MAIL_PASSWORD'] = '' 
 
 app.config['JWT_SECRET_KEY'] = 'super-secrets'
 #app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False #inhabilita la expiración del token
@@ -109,5 +109,5 @@ def upload_file(filename=None):
         else:
             return jsonify({"msg":"file not allowed"}), 400 
 
-if __name__ == '__main__':
-    manager.run()
+#if __name__ == '__main__':
+#    manager.run()
