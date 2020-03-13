@@ -36,7 +36,7 @@ class Curso(db.Model):
             'id': self.id,
             'name': self.name,
         }
-
+    
 class Agenda(db.Model):
     __tablename__ = 'agendas'
     id=db.Column(db.Integer, primary_key=True)

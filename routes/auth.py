@@ -51,7 +51,7 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    sendMail("Bienvenid@ "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Bienvenid@ "+user.fullname)
+    #sendMail("Bienvenid@ "+user.fullname , user.username, "cm.seb90@gmail.com", user.username, "Bienvenid@ "+user.fullname)
 
     if bcrypt.check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.username)
